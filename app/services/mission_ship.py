@@ -2,7 +2,7 @@
 from app.repositories.memory import missions, ships, mission_ships, generate_id
 from app.services.mission_event import register_event
 
-def associate_ship(
+def offer_ship(
     mission_id,
     ship_id,
     offered_seats,
@@ -20,7 +20,7 @@ def associate_ship(
 
     if mission["status"] != "CREATED":
         raise ValueError(
-            "Não é possível associar naves após a missão ser criada"
+            "Não é possível disponibilizar naves após a missão ser criada"
         )
 
     if offered_seats <= 0:
@@ -31,19 +31,19 @@ def associate_ship(
             "A quantidade oferecida supera a capacidade da nave"
         )
 
-    for association in mission_ships.values():
+    for offer in mission_ships.values():
         if (
-            association["mission_id"] == mission_id
-            and association["ship_id"] == ship_id
+            offer["mission_id"] == mission_id
+            and offer["ship_id"] == ship_id
         ):
             raise ValueError(
-                "Nave já associada a esta missão"
+                "Nave já disponibilizada a esta missão"
             )
 
-    association_id = generate_id("mission_ships")
+    offer_id = generate_id("mission_ships")
 
-    association = {
-        "id": association_id,
+    offer = {
+        "id": offer_id,
         "mission_id": mission_id,
         "ship_id": ship_id,
         "offered_seats": offered_seats,
@@ -51,12 +51,12 @@ def associate_ship(
         "status": "AVAILABLE"
     }
 
-    mission_ships[association_id] = association
+    mission_ships[offer_id] = offer
 
     register_event(
         mission_id,
-        "SHIP_ASSOCIATED",
-        f"Nave {ship['name']} associada à missão",
+        "SHIP_OFFERED",
+        f"Nave {ship['name']} disponibilizada à missão",
         details={
             "ship_id": ship_id,
             "offered_seats": offered_seats,
@@ -64,14 +64,14 @@ def associate_ship(
         }
     )
 
-    return association
+    return offer
 
 def list_mission_ships(mission_id):
     return [
-        association
-        for association in mission_ships.values()
-        if association["mission_id"] == mission_id
+        offer
+        for offer in mission_ships.values()
+        if offer["mission_id"] == mission_id
     ]
 
-def get_mission_ship(association_id):
-    return mission_ships.get(association_id)
+def get_mission_ship(offer_id):
+    return mission_ships.get(offer_id)

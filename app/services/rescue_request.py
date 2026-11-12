@@ -54,21 +54,21 @@ def create_request(
     if mission is None:
         raise ValueError("Missão não encontrada")
 
-    association = mission_ships.get(mission_ship_id)
+    offer = mission_ships.get(mission_ship_id)
 
-    if association is None:
-        raise ValueError("Associação de nave não encontrada")
+    if offer is None:
+        raise ValueError("Disponibilidade de nave não encontrada")
 
-    if association["mission_id"] != mission_id:
+    if offer["mission_id"] != mission_id:
         raise ValueError("A nave não pertence a esta missão")
 
-    if association["status"] != "AVAILABLE":
-        raise ValueError("Esta associação não está disponível")
+    if offer["status"] != "AVAILABLE":
+        raise ValueError("Esta oferta não está disponível")
 
     if requested_seats <= 0:
         raise ValueError("A quantidade solicitada deve ser positiva")
 
-    if requested_seats > association["offered_seats"]:
+    if requested_seats > offer["offered_seats"]:
         raise ValueError("A quantidade solicitada supera a oferta da nave")
 
     summary = get_mission_seat_summary(mission_id)
@@ -92,7 +92,7 @@ def create_request(
 
     requests[request_id] = request
 
-    association["status"] = "REQUESTED"
+    offer["status"] = "REQUESTED"
     mission["status"] = MissionStatus.IN_PROGRESS
 
     register_event(
