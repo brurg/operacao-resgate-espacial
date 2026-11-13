@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
-from app.schemas.mission import MissionCreate, MissionResponse
-from app.services import mission
+from backend.schemas.mission import MissionCreate, MissionResponse
+from backend.services import mission
 
 router = APIRouter(
     prefix="/missions",

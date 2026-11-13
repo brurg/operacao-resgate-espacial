@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
-from app.repositories.memory import missions, generate_id
-from app.schemas.mission import MissionStatus
+from backend.repositories.memory import missions, generate_id
+from backend.schemas.mission import MissionStatus
 
 def create_mission(data):
     mission_id = generate_id("missions")

@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from app.schemas.mission_ship import MissionShipCreate, MissionShipResponse
-from app.services import mission_ship
+from backend.schemas.mission_ship import MissionShipCreate, MissionShipResponse
+from backend.services import mission_ship
 
 router = APIRouter(
     prefix="/mission-ships",

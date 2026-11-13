@@ -1,13 +1,13 @@
 
 from datetime import datetime, timezone
-from app.repositories.memory import (
+from backend.repositories.memory import (
     missions,
     mission_ships,
     requests,
     generate_id
 )
-from app.schemas.mission import MissionStatus
-from app.services.mission_event import register_event
+from backend.schemas.mission import MissionStatus
+from backend.services.mission_event import register_event
 
 def get_mission_seat_summary(mission_id):
     mission = missions.get(mission_id)

@@ -1,8 +1,8 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from app.schemas.mission_event import MissionEventResponse
-from app.services import mission_event
-from app.repositories.memory import missions
+from backend.schemas.mission_event import MissionEventResponse
+from backend.services import mission_event
+from backend.repositories.memory import missions
 
 router = APIRouter(
     prefix="/missions",

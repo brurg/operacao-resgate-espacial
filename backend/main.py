@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.routes import (
+from fastapi.middleware.cors import CORSMiddleware
+from backend.routes import (
     missions,
     ships,
     mission_ships,
@@ -25,3 +26,11 @@ def root():
     return {
         "message": "Operação Resgate Espacial API is up"
     }
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

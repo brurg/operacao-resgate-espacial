@@ -1,6 +1,6 @@
 
 from datetime import datetime, timezone
-from app.repositories.memory import events, generate_id
+from backend.repositories.memory import events, generate_id
 
 def register_event(
     mission_id,

@@ -1,6 +1,6 @@
 
-from app.repositories.memory import missions, ships, mission_ships, generate_id
-from app.services.mission_event import register_event
+from backend.repositories.memory import missions, ships, mission_ships, generate_id
+from backend.services.mission_event import register_event
 
 def offer_ship(
     mission_id,

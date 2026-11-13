@@ -1,4 +1,4 @@
-from app.repositories.memory import ships, generate_id
+from backend.repositories.memory import ships, generate_id
 
 def create_ship(data):
     ship_id = generate_id("ships")

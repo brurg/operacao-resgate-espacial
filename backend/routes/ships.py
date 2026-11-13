@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
-from app.schemas.ship import ShipCreate, ShipResponse
-from app.services import ship
+from backend.schemas.ship import ShipCreate, ShipResponse
+from backend.services import ship
 
 router = APIRouter(
     prefix="/ships",

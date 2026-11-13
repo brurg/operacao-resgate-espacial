@@ -1,12 +1,12 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from app.schemas.rescue_request import (
+from backend.schemas.rescue_request import (
     RescueRequestCreate,
     RescueResponseCreate,
     RescueRequestResponse,
     MissionSummaryResponse
 )
-from app.services import rescue_request
+from backend.services import rescue_request
 
 router = APIRouter(
     prefix="/requests",
