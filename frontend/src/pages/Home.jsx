@@ -1,45 +1,65 @@
 import React from "react";
 
-function Home({ onSelectOperator, onSelectCommander }) {
-    return (
-      <main className="home-container">
-        <div className="home-content">
-          <h1>Operação Resgate Espacial</h1>
-  
-          <p>
-            Sistema de gerenciamento de missões de evacuação espacial.
-          </p>
-  
-          <h2>Selecione seu perfil</h2>
-  
-          <div className="role-container">
-            <button
-              className="role-card"
-              onClick={onSelectOperator}
-            >
-              <span className="role-icon">🛰️</span>
+export default function Home({ onSelectRole }) {
+  return (
+    <main className="landing">
+      <div className="landing-stars" />
+
+      <div className="landing-inner">
+        <div className="landing-symbol">
+          <span>✦</span>
+        </div>
+
+        <span className="eyebrow">CENTRAL DE OPERAÇÕES</span>
+
+        <h1>
+          Operação <span>Resgate Espacial</span>
+        </h1>
+
+        <p>
+          Organize operações, disponibilize recursos e acompanhe solicitações.
+        </p>
+
+        <h2>Selecione seu perfil</h2>
+
+        <div className="profile-grid">
+          <button
+            type="button"
+            className="profile-card"
+            onClick={() => onSelectRole("operator")}
+          >
+            <div className="profile-icon">⌖</div>
+            <div className="profile-meta">
+              <span>PERFIL 01</span>
               <h3>Operador</h3>
               <p>
-                Gerencie missões, cadastre naves e acompanhe
-                o andamento das operações.
+                Cadastre e consulte os recursos e acompanhe o andamento das operações.
               </p>
-            </button>
-  
-            <button
-              className="role-card"
-              onClick={onSelectCommander}
-            >
-              <span className="role-icon">🚀</span>
+            </div>
+            <span className="profile-action">Acessar painel →</span>
+          </button>
+
+          <button
+            type="button"
+            className="profile-card"
+            onClick={() => onSelectRole("commander")}
+          >
+            <div className="profile-icon">✧</div>
+            <div className="profile-meta">
+              <span>PERFIL 02</span>
               <h3>Comandante</h3>
               <p>
-                Disponibilize naves e gerencie as solicitações
-                de assentos recebidas.
+                Disponibilize assentos das naves e gerencie as solicitações recebidas.
               </p>
-            </button>
-          </div>
+            </div>
+            <span className="profile-action">Acessar painel →</span>
+          </button>
         </div>
-      </main>
-    );
-  }
-  
-  export default Home;
+
+        <footer className="landing-foot">
+          SISTEMA DE GERENCIAMENTO DE RESGATE ESPACIAL
+        </footer>
+      </div>
+    </main>
+  );
+}
