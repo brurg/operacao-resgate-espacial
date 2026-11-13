@@ -116,35 +116,21 @@ A solução deverá garantir a consistência das informações mesmo diante de r
 
 ### Estrutura de Classes
 
-![alt text](classe.png)
+![alt text](diagramas/classe.png)
 
 ### Diagramas de Sequência
 
 #### Cadastro de naves e preparação da missão
 
-![alt text](missao1.png)
+![alt text](diagramas/missao1.png)
 
 #### Solicitação e resposta dos comandantes
 
-![alt text](pedidos1.png)
+![alt text](diagramas/pedidos1.png)
 
 #### Cancelamento e expiração de missões
 
-![alt text](cancelamento1.png)
-
-### Camadas e Responsabilidades
-
-![alt text](camadas.png)
-
-| Camada | Responsabilidade |
-| ------ | ---------------- |
-| Routes |	Receber requisições HTTP e retornar respostas |
-| Schemas | Validar os dados de entrada e definir os formatos de saída |
-| Models | Representar as entidades e suas transições válidas |
-| Services | Implementar as regras de negócio |
-| Repositories | Armazenar e recuperar os dados |
-| Enums | Definir os estados e tipos de eventos |
-| Core | Centralizar exceções e mecanismos de sincronização |
+![alt text](diagramas/cancelamento1.png)
 
 ### APIs Implementadas
 

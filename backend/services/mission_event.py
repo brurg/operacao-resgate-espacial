@@ -25,7 +25,6 @@ def register_event(
 
     return event
 
-
 def list_mission_events(mission_id):
     mission_events = [
         event for event in events.values()
@@ -36,7 +35,6 @@ def list_mission_events(mission_id):
         mission_events,
         key=lambda event: event["timestamp"]
     )
-
 
 def get_event(event_id):
     return events.get(event_id)

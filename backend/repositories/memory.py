@@ -3,7 +3,7 @@ ships = {
     1: {
         "id": 1,
         "name": "Nave Alpha",
-        "total_capacity": 23
+        "total_capacity": 12
     },
     2: {
         "id": 2,
@@ -13,7 +13,7 @@ ships = {
     3: {
         "id": 3,
         "name": "Nave Gamma",
-        "total_capacity": 8
+        "total_capacity": 5
     }
 }
 
