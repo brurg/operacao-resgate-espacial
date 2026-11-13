@@ -1169,21 +1169,6 @@ td b {
   color: #b79acb;
 }
 
-.brand-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 54px;
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  background: #63427d;
-  color: #eadcf4;
-  font-size: 29px;
-  line-height: 1;
-  text-align: center;
-}
-
 .brand small {
   display: block;
   margin-top: 3px;

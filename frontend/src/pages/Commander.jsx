@@ -59,7 +59,6 @@ export default function CommanderArea(props) {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-icon">✦</span>
           <div>
             <strong>RESGATE</strong>
             <small>OPERAÇÃO ESPACIAL</small>

@@ -204,7 +204,7 @@ export function ShipsList({ ships }) {
               <div className="ship-card-icon">✦</div>
               <h3>{ship.name}</h3>
               <p>Capacidade total</p>
-              <strong>{ship.capacity} assentos</strong>
+              <strong>{ship.total_capacity} assentos</strong>
               <Status value={ship.status} />
             </article>
           ))}
