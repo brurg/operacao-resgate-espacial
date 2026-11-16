@@ -67,7 +67,7 @@ A API foi desenvolvida com FastAPI e disponibiliza documentação interativa aut
 
 Com o backend em execução, é possível ver em:
 
-- **Swagger UI:** `http://localhost:8000/docs`
+- **Swagger UI:** `http://localhost:8000/doc`
 
 As rotas estão organizadas por recursos, incluindo:
 
@@ -111,15 +111,17 @@ Os pedidos pendentes são considerados compromissos temporários, pois ainda pod
 
 A quantidade solicitada de cada nave é limitada pela necessidade da missão, pela oferta registrada e pela capacidade disponível da nave.
 
-### Respostas e reavaliação
+### Disponibilidade, respostas e reavaliação
 
 Os comandantes podem confirmar todas as vagas solicitadas, confirmar apenas uma parte ou recusar o pedido.
 
-Quando uma solicitação é respondida, cancelada ou expirada, a estratégia é reavaliada para verificar se ainda são necessárias vagas adicionais.
+A disponibilidade das naves é controlada pelo sistema conforme os assentos são comprometidos por solicitações e confirmações. Assim, quando uma nave disponibiliza vagas para uma missão, essa quantidade não pode ser alterada manualmente após o cadastro da oferta. Entretanto, sua capacidade disponível diminui à medida que novos pedidos são realizados e assentos são confirmados, respeitando também os compromissos assumidos com outras missões.
+
+Quando uma solicitação é respondida, cancelada ou expirada, a estratégia é reavaliada para verificar se ainda são necessárias vagas adicionais e redistribuir a capacidade que eventualmente foi liberada.
 
 Uma missão só é considerada concluída quando todos os assentos necessários estão efetivamente confirmados. Assentos pendentes não são contabilizados como garantidos.
 
-Os detalhes dos critérios, fórmulas e decisões de implementação estão descritos em [doc/Estrategia.md](doc/Estratégia.md).
+Os detalhes dos critérios, fórmulas e decisões de implementação estão descritos em [doc/Estratégia.md](doc/Estratégia.md).
 
 ## Consistência e concorrência
 
@@ -131,8 +133,26 @@ Como os dados são mantidos em memória, essa proteção não substitui mecanism
 
 Os documentos detalhados do projeto estão organizados na pasta [`doc/`](doc/).
 
-- [Especificação do projeto](docs/Especificação.md) — requisitos e funcionalidades solicitadas para o sistema.
-- [Arquitetura do sistema](docs/Arquitetura.md) — organização dos componentes e comunicação entre frontend e backend.
-- [Estratégia de distribuição](docs/Estratégia.md) — critérios de priorização, seleção de naves, cálculo de vagas e reavaliação das solicitações.
+- [Especificação do projeto](doc/Especificação.md) — requisitos e funcionalidades solicitadas para o sistema.
+- [Arquitetura do sistema](doc/Arquitetura.md) — organização dos componentes e comunicação entre frontend e backend.
+- [Estratégia de distribuição](doc/Estratégia.md) — critérios de priorização, seleção de naves, cálculo de vagas e reavaliação das solicitações.
 
 ## Demonstração e validação
+
+### Testes automatizados
+
+O projeto utiliza **pytest** para validar o funcionamento das regras de negócio e dos endpoints da API. A suíte combina testes de serviço, testes de integração com `TestClient`, testes parametrizados e cenários de concorrência.
+
+Os testes foram organizados por responsabilidade: missões, naves, ofertas de assentos, solicitações de resgate, estratégia de distribuição e concorrência. Foram utilizadas fixtures para reutilizar dados e isolar os cenários, controle do relógio para testar prazos de forma previsível e snapshots para verificar se operações inválidas preservam o estado dos repositórios.
+
+Também foram desenvolvidos testes concorrentes com `ThreadPoolExecutor` e `Barrier`, buscando identificar condições de corrida que poderiam causar excesso de reservas, confirmações duplicadas ou inconsistências na quantidade de assentos.
+
+Para executar na raiz do projeto:
+
+```bash
+python -m pytest -v
+```
+
+A documentação detalhada dos cenários, organizada por arquivo de teste, está disponível em **[Casos de teste e escolhas técnicas](doc/CasosTeste.md)**.
+
+### Demonstração

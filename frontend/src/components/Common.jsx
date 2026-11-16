@@ -213,7 +213,11 @@ export function MissionTracking({
           <div className="metrics-grid">
             <Metric
               label="Passageiros solicitados"
-              value={summary?.requested_seats ?? "—"}
+              value={summary?.pending_seats ?? "—"}
+            />
+            <Metric
+              label="Assentos faltantes"
+              value={summary?.missing_seats ?? "—"}
             />
             <Metric
               label="Assentos confirmados"

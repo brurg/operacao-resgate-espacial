@@ -10,7 +10,6 @@ from backend.repositories.memory import (
 from backend.schemas.mission import MissionStatus
 from backend.services.mission_event import register_event
 
-
 def get_mission_seat_summary(mission_id):
     with lock:
         mission = missions.get(mission_id)
@@ -74,6 +73,21 @@ def get_ship_available_capacity(ship_id):
         committed = get_ship_committed_seats(ship_id)
 
         return max(0, ship["total_capacity"] - committed)
+
+def add_mission_urgency(request):
+    mission = missions.get(request["mission_id"])
+
+    if mission is None:
+        raise ValueError("Missão não encontrada")
+
+    urgency = mission["urgency"]
+    if hasattr(urgency, "value"):
+        urgency = urgency.value
+
+    return {
+        **request,
+        "urgency": urgency
+    }
 
 def create_request(mission_id, mission_ship_id, requested_seats, expires_at=None):
     with lock:
@@ -361,8 +375,16 @@ def list_requests(mission_id=None):
                 if request["mission_id"] == mission_id
             ]
 
-        return all_requests
+        return [
+            add_mission_urgency(request)
+            for request in all_requests
+        ]
 
 def get_request(request_id):
     with lock:
-        return requests.get(request_id)
+        request = requests.get(request_id)
+
+        if request is None:
+            return None
+
+        return add_mission_urgency(request)

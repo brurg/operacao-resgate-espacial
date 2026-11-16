@@ -288,6 +288,7 @@ export function RequestsList({
                 <div className="request-main">
                   <h3>{missionName}</h3>
                   <p>{shipName}</p>
+                  <p>Prioridade: {request.urgency}</p>
 
                   <p>
                     {request.requested_seats} assentos solicitados

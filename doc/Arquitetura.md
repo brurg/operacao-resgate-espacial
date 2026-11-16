@@ -35,7 +35,6 @@
 | POST | /missions/{mission_id}/ships | Disponibilizar uma nave para uma missão |
 | GET | /missions/{mission_id}/ships | Listar as naves disponibilizadas à missão |
 | GET | /missions/{mission_id}/ships/{ship_id} | Consultar a disponibilidade de uma nave na missão |
-| PATCH | /missions/{mission_id}/ships/{ship_id} | Atualizar a disponibilidade oferecida para a missão |
 | POST | /missions/{mission_id}/requests | Criar pedido de reserva |
 | GET | /missions/{mission_id}/requests | Listar pedidos da missão |
 | GET | /requests/{request_id} | Consultar pedido específico |
@@ -55,7 +54,7 @@
 | Persistência | Em memória |
 | Validação de dados | Pydantic |
 | Testes | pytest e TestClient |
-| Concorrência | Locks por missão |
+| Concorrência | Lock global |
 | Comunicação com comandantes | Simulada por endpoints |
 | Expiração | Simulada por operação da API |
 | Histórico | Eventos imutáveis |

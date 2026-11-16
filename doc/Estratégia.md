@@ -160,6 +160,8 @@ Para definir o comportamento da estratégia, foram adotadas as seguintes premiss
 - Respostas já recebidas e decisões encerradas são preservadas.
 - A estratégia considera a capacidade comprometida por pedidos de uma mesma nave, inclusive quando associada a diferentes missões.
 - A persistência dos dados é realizada em memória.
+- A disponibilidade informada por uma nave no cadastro da oferta é considerada válida durante o processamento dos pedidos. Caso o comandante não consiga atender à quantidade solicitada, essa situação é representada por uma confirmação parcial ou recusa.
+- Alterações operacionais espontâneas na capacidade de uma nave após a confirmação dos assentos não são simuladas pelo sistema. As vagas já confirmadas são consideradas compromissos garantidos.
 
 ## Consistência e concorrência
 

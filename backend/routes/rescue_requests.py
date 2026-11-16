@@ -16,12 +16,13 @@ router = APIRouter(
 @router.post("/", response_model=RescueRequestResponse, status_code=201)
 def create_request(data: RescueRequestCreate):
     try:
-        return rescue_request.create_request(
+        request = rescue_request.create_request(
             mission_id=data.mission_id,
             mission_ship_id=data.mission_ship_id,
             requested_seats=data.requested_seats,
             expires_at=data.expires_at
         )
+        return rescue_request.add_mission_urgency(request)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 
@@ -47,24 +48,27 @@ def register_response(
     data: RescueResponseCreate
 ):
     try:
-        return rescue_request.register_response(
+        request = rescue_request.register_response(
             request_id,
             data.confirmed_seats
         )
+        return rescue_request.add_mission_urgency(request)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 
 @router.post("/{request_id}/cancel", response_model=RescueRequestResponse)
 def cancel_request(request_id: int):
     try:
-        return rescue_request.cancel_request(request_id)
+        request = rescue_request.cancel_request(request_id)
+        return rescue_request.add_mission_urgency(request)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 
 @router.post("/{request_id}/expire", response_model=RescueRequestResponse)
 def expire_request(request_id: int):
     try:
-        return rescue_request.expire_request(request_id)
+        request = rescue_request.expire_request(request_id)
+        return rescue_request.add_mission_urgency(request)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 

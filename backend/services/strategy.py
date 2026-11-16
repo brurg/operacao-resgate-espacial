@@ -55,10 +55,18 @@ def rank_offers(offers, urgency):
     candidates = []
 
     for offer in offers:
-        capacity = offer["offered_seats"]
+        offered_capacity = offer["offered_seats"]
 
-        if capacity <= 0:
+        if offered_capacity <= 0:
             continue
+
+        available_capacity = get_ship_available_capacity(
+            offer["ship_id"]
+        )
+        capacity = min(
+            offered_capacity,
+            available_capacity
+        )
 
         eta = get_eta_minutes(offer["arrival_time"])
 

@@ -7,17 +7,17 @@ missions = {}
 ships = {
     1: {
         "id": 1,
-        "name": "Nave Alpha",
+        "name": "Alpha",
         "total_capacity": 12
     },
     2: {
         "id": 2,
-        "name": "Nave Beta",
+        "name": "eta",
         "total_capacity": 17
     },
     3: {
         "id": 3,
-        "name": "Nave Gamma",
+        "name": "Gamma",
         "total_capacity": 5
     }
 }

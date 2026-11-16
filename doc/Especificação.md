@@ -97,7 +97,6 @@ A solução deverá garantir a consistência das informações mesmo diante de r
 | RF16 | Consultar situação da missão | Apresentar o resumo das vagas confirmadas, pendentes e faltantes, além do status da missão |
 | RF17 | Consultar histórico de eventos	| Permitir consultar os eventos e operações registrados durante uma missão |
 | RF18 | Validar operações | Verificar se as operações solicitadas respeitam as regras de negócio e o estado atual das entidades |
-| RF19 | Atualizar disponibilidade da nave | Permitir atualizar a disponibilidade de uma nave para uma missão, respeitando as reservas e os pedidos já existentes |
 
 ### Requisitos Não Funcionais
 

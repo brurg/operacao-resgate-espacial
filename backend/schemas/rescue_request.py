@@ -18,6 +18,7 @@ class RescueRequestResponse(BaseModel):
     requested_seats: int
     confirmed_seats: int
     status: str
+    urgency: str
     created_at: datetime
     responded_at: Optional[datetime]
     expires_at: Optional[datetime]

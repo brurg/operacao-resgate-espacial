@@ -18,7 +18,6 @@
 14. Mensagens repetidas, atrasadas ou fora de ordem e operações simultâneas não podem distorcer o andamento do resgate.
 15. Uma missão não pode ser criada com zero pessoas;
 16. Uma nave pode participar de mais de uma missão;
-17. Não podem ser cadastradas mais naves após o recebimento da missão;.
 
 ## Funções do Sistema 
 
