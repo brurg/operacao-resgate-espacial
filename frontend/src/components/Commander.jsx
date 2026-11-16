@@ -6,6 +6,7 @@ import {
   Status,
   Field,
   FormActions,
+  MissionTracking
 } from "./Common.jsx";
 import { api } from "../services/api.js";
 import { dateTime } from "../utils/formatters.js";
@@ -15,7 +16,10 @@ export function CommanderOverview({
   ships,
   requests,
   offersByMission,
-  onTab,
+  summaries,
+  eventsByMission,
+  selectedMission,
+  selectMission,
 }) {
   const pendingRequests = requests.filter(
     request => String(request.status).toUpperCase() === "PENDING"
@@ -42,31 +46,6 @@ export function CommanderOverview({
       </div>
 
       <section className="panel">
-        <SectionTitle
-          title="Ações rápidas"
-          description="Acesse as principais operações do comandante."
-        />
-
-        <div className="quick-actions">
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => onTab("offers")}
-          >
-            Disponibilizar assentos
-          </button>
-
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => onTab("requests")}
-          >
-            Consultar solicitações
-          </button>
-        </div>
-      </section>
-
-      <section className="panel">
         <SectionTitle title="Solicitações pendentes" />
 
         {pendingRequests.length ? (
@@ -89,6 +68,16 @@ export function CommanderOverview({
           <Empty title="Nenhuma solicitação pendente" />
         )}
       </section>
+
+      <MissionTracking
+        missions={missions}
+        offersByMission={offersByMission}
+        summaries={summaries}
+        eventsByMission={eventsByMission}
+        selectedMission={selectedMission}
+        onSelectMission={selectMission}
+        showEvents={false}
+      />
     </>
   );
 }
@@ -223,6 +212,8 @@ export function FleetList({ ships, offersByMission }) {
 }
 
 export function RequestsList({ requests, runAction }) {
+  const [confirmedSeats, setConfirmedSeats] = React.useState({});
+
   async function respond(requestId, seats) {
     await runAction(
       () => api.respondRequest(requestId, seats),
@@ -239,37 +230,69 @@ export function RequestsList({ requests, runAction }) {
 
       {requests.length ? (
         <div className="request-list">
-          {requests.map(request => (
-            <article className="request-card" key={request.id}>
-              <div className="request-main">
-                <h3>{request.mission_name || request.mission_id}</h3>
-                <p>{request.requested_seats} assentos solicitados</p>
-                <Status value={request.status} />
-              </div>
+          {requests.map(request => {
+            const isPending =
+              String(request.status).toUpperCase() === "PENDING";
 
-              {String(request.status).toUpperCase() === "PENDING" && (
-                <div className="response-controls">
-                  <button
-                    type="button"
-                    className="primary-button"
-                    onClick={() =>
-                      respond(request.id, request.requested_seats)
-                    }
-                  >
-                    Confirmar
-                  </button>
+            const seats =
+              confirmedSeats[request.id] ?? String(request.requested_seats);
 
-                  <button
-                    type="button"
-                    className="primary-button"
-                    onClick={() => respond(request.id, 0)}
-                  >
-                    Recusar
-                  </button>
-                </div>
-              )}
-            </article>
-          ))}
+            return (
+              <article className="request-card" key={request.id}>
+                <div className="request-main">
+                  <h3>{request.mission_name || request.mission_id}</h3>
+                  <p>{request.requested_seats} assentos solicitados</p>
+
+                  {!isPending && (
+                    <p>{request.confirmed_seats} assentos confirmados</p>
+                  )}
+
+                  <Status value={request.status} />
+                </div>        
+                {isPending && (
+                  <div className="response-controls">
+                    <Field label="Assentos a confirmar">
+                      <input
+                        type="number"
+                        min="1"
+                        max={request.requested_seats}
+                        step="1"
+                        value={seats}
+                        onChange={event =>
+                          setConfirmedSeats(previous => ({
+                            ...previous,
+                            [request.id]: event.target.value
+                          }))
+                        }
+                      />
+                    </Field>
+
+                    <button
+                      type="button"
+                      className="primary-button"
+                      disabled={
+                        seats === "" ||
+                        !Number.isInteger(Number(seats)) ||
+                        Number(seats) <= 0 ||
+                        Number(seats) > request.requested_seats
+                      }
+                      onClick={() => respond(request.id, Number(seats))}
+                    >
+                      Enviar resposta
+                    </button>
+
+                    <button
+                      type="button"
+                      className="primary-button"
+                      onClick={() => respond(request.id, 0)}
+                    >
+                      Recusar
+                    </button>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       ) : (
         <Empty title="Nenhuma solicitação recebida" />
@@ -277,4 +300,3 @@ export function RequestsList({ requests, runAction }) {
     </section>
   );
 }
-  

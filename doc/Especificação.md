@@ -38,13 +38,13 @@ A solução deverá garantir a consistência das informações mesmo diante de r
 | RN03 | A quantidade de pessoas de uma missão deve ser um número inteiro positivo |
 | RN04 | Uma missão não pode ser cadastrada sem pessoas para evacuar |
 | RN05 | Uma missão poderá receber disponibilizações de várias naves |
-| RN06 | Após missão ser solicitada, não será permitido cadastrar novas naves |
-| RN07 | Uma missão será considerada concluída somente quando a quantidade total de vagas confirmadas for igual à quantidade de pessoas a evacuar |
-| RN08 | Uma missão com vagas ainda não confirmadas não poderá ser considerada concluída |
-| RN09 | Uma missão poderá permanecer em andamento enquanto houver pedidos pendentes ou necessidade de novas solicitações |
-| RN10 | O estado da missão deverá ser atualizado conforme as operações realizadas em seus pedidos |
-| RN11 | Toda nave deve possuir um identificador único |
-| RN12 | Uma nave poderá participar de diferentes missões |
+| RN06 | Uma missão será considerada concluída somente quando a quantidade total de vagas confirmadas for igual à quantidade de pessoas a evacuar |
+| RN07 | Uma missão com vagas ainda não confirmadas não poderá ser considerada concluída |
+| RN08 | Uma missão poderá permanecer em andamento enquanto houver pedidos pendentes ou necessidade de novas solicitações |
+| RN09 | O estado da missão deverá ser atualizado conforme as operações realizadas em seus pedidos |
+| RN10 | Toda nave deve possuir um identificador único |
+| RN11 | Uma nave poderá participar de diferentes missões |
+| RN12 | A mesma nave não pode ser disponibilizada mais de uma vez para a mesma missão |
 | RN13 | Cada nave deverá possuir capacidade total, quantidade de vagas disponibilizadas, tempo estimado de chegada, o prazo de validade e seu status |
 | RN14 | A quantidade de vagas disponibilizadas de uma nave para uma missão não poderá ultrapassar a capacidade total da nave |
 | RN15 | A disponibilidade de uma nave deverá considerar as vagas já comprometidas em outras missões |
@@ -181,7 +181,7 @@ A solução deverá garantir a consistência das informações mesmo diante de r
 | 3 - Consultar missão | Operador | Consultar os detalhes de uma missão específica | Deve retornar os dados da missão informada ou erro caso ela não exista |
 | 4 - Cadastrar nave | Operador | Cadastrar uma nave informando nome e capacidade total | Deve permitir o cadastro com dados válidos e rejeitar capacidades iguais ou inferiores a zero |
 | 5 - Consultar naves | Operador | Listar e consultar as naves cadastradas | Deve retornar as naves existentes e seus dados e aviso caso não tenha nenhuma cadastrada |
-| 6 - Disponibilizar nave para missão | Operador | Liberar naves a uma missão, informando a quantidade de assentos disponibilizados e o tempo estimado de chegada | Só associado se nave e a missão existirem; a quantidade disponibilizada deve ser positiva e não pode superar a capacidade total da nave; não deve permitir novas dsiponibilizações após a requisição do pedido para essa missão |
+| 6 - Disponibilizar nave para missão | Operador | Liberar naves a uma missão, informando a quantidade de assentos disponibilizados e o tempo estimado de chegada | Só associado se nave e a missão existirem; a quantidade disponibilizada deve ser positiva e não pode superar a capacidade total da nave; não deve permitir novas dsiponibilizações da mesma nave após a requisição do pedido para essa missão |
 | 7 - Consultar naves da missão | Operador | Visualizar as naves disponibilizadas a uma missão | Deve retornar as naves vinculadas à missão, incluindo assentos liberados, previsão de chegada e estado |
 | 8 - Criar solicitação | Operador | Solicitar uma quantidade de assentos a uma nave disponibilizada à missão | A quantidade solicitada deve ser positiva, não pode superar os assentos disponibilizados e não pode gerar solicitações acima da necessidade da missão, considerando assentos confirmados e pendentes |
 | 9 - Consultar solicitações | Operador | Listar as solicitações realizadas para uma missão. | Deve retornar as solicitações e seus respectivos estados, quantidades solicitadas e confirmadas |

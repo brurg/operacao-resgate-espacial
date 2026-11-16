@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import {
   OperatorOverview,
-  MissionsList,
-  ShipsList,
   CreateMission,
   CreateShip,
 } from "../components/Operator.jsx";
+import { ShipsList, MissionsList } from "../components/Common.jsx";
 
 const TABS = [
   { id: "overview", label: "Visão geral" },

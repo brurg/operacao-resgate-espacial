@@ -8,11 +8,13 @@ class MissionStatus(str, Enum):
     COMPLETED = "COMPLETED"
 
 class MissionCreate(BaseModel):
+    name: str
     station: str
     people_count: int = Field(gt=0)
 
 class MissionResponse(BaseModel):
     id: int
+    name: str
     station: str
     people_count: int
     status: MissionStatus

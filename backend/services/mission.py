@@ -7,6 +7,7 @@ def create_mission(data):
 
     mission = {
         "id": mission_id,
+        "name": data.name,
         "station": data.station,
         "people_count": data.people_count,
         "status": MissionStatus.CREATED,

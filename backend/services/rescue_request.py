@@ -124,7 +124,7 @@ def register_response(request_id, confirmed_seats):
     elif confirmed_seats > 0:
         status = "PARTIAL"
     else:
-        status = "REFUSED"
+        status = "UNAVAILABLE"
 
     request["confirmed_seats"] = confirmed_seats
     request["status"] = status

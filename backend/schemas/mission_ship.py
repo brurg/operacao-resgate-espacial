@@ -11,6 +11,7 @@ class MissionShipResponse(BaseModel):
     id: int
     mission_id: int
     ship_id: int
+    ship_name: str
     offered_seats: int
     arrival_time: datetime
     status: str

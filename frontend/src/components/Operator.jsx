@@ -1,15 +1,12 @@
 import React from "react";
-import { useEffect } from "react";
 import {
-  Empty,
   Metric,
   SectionTitle,
-  Status,
   Field,
   FormActions,
+  MissionTracking
 } from "./Common.jsx";
 import { api } from "../services/api.js";
-import { dateTime } from "../utils/formatters.js";
 
 export function OperatorOverview({
   missions,
@@ -20,22 +17,7 @@ export function OperatorOverview({
   selectedMission,
   onSelectMission,
 }) {
-  useEffect(() => {
-    if (
-      missions.length &&
-      !missions.some(m => String(m.id) === String(selectedMission))
-    ) {
-      onSelectMission(String(missions[0].id));
-    }
-  }, [missions, selectedMission, onSelectMission]);
-
-  const mission = missions.find(
-    m => String(m.id) === String(selectedMission)
-  );
-
-  const offers = mission ? offersByMission[mission.id] || [] : [];
-  const summary = mission ? summaries[mission.id] : null;
-  const events = mission ? eventsByMission[mission.id] || [] : [];
+  const totalOffers = Object.values(offersByMission).flat().length;
 
   return (
     <>
@@ -48,171 +30,18 @@ export function OperatorOverview({
       <div className="metrics-grid">
         <Metric label="Missões" value={missions.length} />
         <Metric label="Naves cadastradas" value={ships.length} />
-        <Metric
-          label="Ofertas de assentos"
-          value={Object.values(offersByMission).flat().length}
-        />
+        <Metric label="Ofertas de assentos" value={totalOffers} />
       </div>
 
-      <section className="panel">
-        <SectionTitle
-          title="Acompanhamento de missão"
-          description="Selecione uma missão para consultar seus dados."
-        />
-
-        <Field label="Missão">
-          <select
-            value={selectedMission}
-            onChange={event => onSelectMission(event.target.value)}
-          >
-            <option value="">Selecione uma missão</option>
-            {missions.map(item => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </Field>
-
-        {mission && (
-          <>
-            <div className="metrics-grid">
-              <Metric
-                label="Passageiros solicitados"
-                value={summary?.requested_seats ?? "—"}
-              />
-              <Metric
-                label="Assentos confirmados"
-                value={summary?.confirmed_seats ?? "—"}
-              />
-              <Metric label="Ofertas recebidas" value={offers.length} />
-            </div>
-
-            <h3>Ofertas de naves</h3>
-
-            {offers.length ? (
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Nave</th>
-                      <th>Assentos</th>
-                      <th>Chegada estimada</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {offers.map(offer => (
-                      <tr key={offer.id}>
-                        <td>{offer.ship_name || offer.ship_id}</td>
-                        <td>{offer.offered_seats}</td>
-                        <td>{dateTime(offer.arrival_time)}</td>
-                        <td><Status value={offer.status} /></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <Empty title="Nenhuma oferta recebida" />
-            )}
-
-            <h3>Histórico de eventos</h3>
-
-            {events.length ? (
-              <div className="timeline">
-                {events.map(event => (
-                  <div className="timeline-item" key={event.id}>
-                    <i />
-                    <div>
-                      <b>{event.description || event.event_type}</b>
-                      <span>{dateTime(event.created_at)}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Empty title="Nenhum evento registrado" />
-            )}
-          </>
-        )}
-      </section>
+      <MissionTracking
+        missions={missions}
+        offersByMission={offersByMission}
+        summaries={summaries}
+        eventsByMission={eventsByMission}
+        selectedMission={selectedMission}
+        onSelectMission={onSelectMission}
+      />
     </>
-  );
-}
-
-export function MissionsList({ missions, onSelect }) {
-  return (
-    <section className="panel">
-      <SectionTitle
-        title="Missões cadastradas"
-        description="Consulte e acompanhe as operações de resgate."
-      />
-
-      {missions.length ? (
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Missão</th>
-                <th>Destino</th>
-                <th>Passageiros</th>
-                <th>Status</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {missions.map(mission => (
-                <tr key={mission.id}>
-                  <td>{mission.name}</td>
-                  <td>{mission.destination}</td>
-                  <td>{mission.requested_seats}</td>
-                  <td><Status value={mission.status} /></td>
-                  <td>
-                    <button
-                      type="button"
-                      className="primary-button"
-                      onClick={() => onSelect(mission.id)}
-                    >
-                      Acompanhar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <Empty title="Nenhuma missão cadastrada" />
-      )}
-    </section>
-  );
-}
-
-export function ShipsList({ ships }) {
-  return (
-    <section className="panel">
-      <SectionTitle
-        title="Naves cadastradas"
-        description="Consulte a frota disponível no sistema."
-      />
-
-      {ships.length ? (
-        <div className="ship-grid">
-          {ships.map(ship => (
-            <article className="ship-card" key={ship.id}>
-              <div className="ship-card-icon">✦</div>
-              <h3>{ship.name}</h3>
-              <p>Capacidade total</p>
-              <strong>{ship.total_capacity} assentos</strong>
-              <Status value={ship.status} />
-            </article>
-          ))}
-        </div>
-      ) : (
-        <Empty title="Nenhuma nave cadastrada" />
-      )}
-    </section>
   );
 }
 
@@ -226,8 +55,8 @@ export function CreateMission({ runAction, onDone }) {
       () =>
         api.createMission({
           name: form.get("name"),
-          destination: form.get("destination"),
-          requested_seats: Number(form.get("requested_seats")),
+          station: form.get("station"),
+          people_count: Number(form.get("requested_seats")),
         }),
       "Missão cadastrada com sucesso."
     );
@@ -249,8 +78,8 @@ export function CreateMission({ runAction, onDone }) {
           <input name="name" required />
         </Field>
 
-        <Field label="Destino">
-          <input name="destination" required />
+        <Field label="Estação">
+          <input name="station" required />
         </Field>
 
         <Field label="Passageiros solicitados">
@@ -278,7 +107,7 @@ export function CreateShip({ runAction, onDone }) {
       () =>
         api.createShip({
           name: form.get("name"),
-          capacity: Number(form.get("capacity")),
+          total_capacity: Number(form.get("total_capacity")),
         }),
       "Nave cadastrada com sucesso."
     );
@@ -302,7 +131,7 @@ export function CreateShip({ runAction, onDone }) {
 
         <Field label="Capacidade total de assentos">
           <input
-            name="capacity"
+            name="total_capacity"
             type="number"
             min="1"
             required

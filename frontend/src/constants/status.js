@@ -1,4 +1,4 @@
-export const STATUS = {
+export const STATUS_LABELS = {
   CREATED: "Criada",
   IN_PROGRESS: "Em andamento",
   COMPLETED: "Concluída",
@@ -8,29 +8,14 @@ export const STATUS = {
   PENDING: "Pendente",
   CONFIRMED: "Confirmada",
   PARTIAL: "Parcial",
-  REFUSED: "Recusada",
   CANCELLED: "Cancelada",
   EXPIRED: "Expirada",
 };
 
-export function statusClass(status) {
-  const normalized = String(status || "").toUpperCase();
-
-  const classes = {
-    CREATED: "created",
-    IN_PROGRESS: "in-progress",
-    COMPLETED: "completed",
-    AVAILABLE: "available",
-    REQUESTED: "requested",
-    UNAVAILABLE: "unavailable",
-    PENDING: "pending",
-    CONFIRMED: "confirmed",
-    PARTIAL: "partial",
-    REFUSED: "refused",
-    CANCELLED: "cancelled",
-    EXPIRED: "expired",
-  };
-
-  return classes[normalized] || "default";
+export function statusClass(value) {
+  return String(value || "").toLowerCase().replaceAll("_", "-");
 }
-  
+
+export function statusLabel(value) {
+  return STATUS_LABELS[String(value || "").toUpperCase()] || value || "Não informado";
+}

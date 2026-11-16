@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CommanderOverview,
   CreateOffer,
   FleetList,
   RequestsList,
 } from "../components/Commander.jsx";
+import { MissionsList } from "../components/Common.jsx";
 
 const TABS = [
   { id: "overview", label: "Visão geral" },
+  { id: "missions", label: "Missões" },
   { id: "offers", label: "Disponibilizar assentos" },
   { id: "fleet", label: "Disponibilidades" },
   { id: "requests", label: "Solicitações" },
 ];
 
 export default function CommanderArea(props) {
+  const [selectedMission, setSelectedMission] = useState("");
+  function selectMission(id) {
+    setSelectedMission(String(id));
+    props.onTab("overview");
+  }
+
   function renderContent() {
     switch (props.tab) {
       case "offers":
@@ -42,6 +50,14 @@ export default function CommanderArea(props) {
           />
         );
 
+      case "missions":
+        return (
+          <MissionsList
+            missions={props.missions}
+            onSelect={selectMission}
+          />
+        );
+
       default:
         return (
           <CommanderOverview
@@ -49,7 +65,10 @@ export default function CommanderArea(props) {
             ships={props.ships}
             requests={props.requests}
             offersByMission={props.offersByMission}
-            onTab={props.onTab}
+            summaries={props.summaries}
+            eventsByMission={props.eventsByMission}
+            selectedMission={selectedMission}
+            selectMission={setSelectedMission}
           />
         );
     }

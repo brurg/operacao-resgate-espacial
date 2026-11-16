@@ -1,6 +1,7 @@
 
 from backend.repositories.memory import missions, ships, mission_ships, generate_id
 from backend.services.mission_event import register_event
+from backend.services.rescue_request import get_mission_seat_summary
 
 def offer_ship(
     mission_id,
@@ -18,9 +19,16 @@ def offer_ship(
     if ship is None:
         raise ValueError("Nave não encontrada")
 
-    if mission["status"] != "CREATED":
+    if mission["status"] == "COMPLETED":
         raise ValueError(
-            "Não é possível disponibilizar naves após a missão ser criada"
+            "Não é possível disponibilizar naves para uma missão concluída"
+        )
+
+    summary = get_mission_seat_summary(mission_id)
+
+    if summary["missing_seats"] <= 0:
+        raise ValueError(
+            "Não há mais necessidade de assentos para esta missão"
         )
 
     if offered_seats <= 0:
@@ -46,6 +54,7 @@ def offer_ship(
         "id": offer_id,
         "mission_id": mission_id,
         "ship_id": ship_id,
+        "ship_name": ship["name"],
         "offered_seats": offered_seats,
         "arrival_time": arrival_time,
         "status": "AVAILABLE"
