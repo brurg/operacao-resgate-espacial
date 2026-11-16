@@ -1,4 +1,9 @@
+from threading import RLock
+
+lock = RLock()
+
 missions = {}
+
 ships = {
     1: {
         "id": 1,

@@ -127,6 +127,7 @@ export function MissionsList({ missions, onSelect }) {
                 <th>Missão</th>
                 <th>Estação</th>
                 <th>Passageiros</th>
+                <th>Urgência</th>
                 <th>Status</th>
                 <th />
               </tr>
@@ -137,6 +138,7 @@ export function MissionsList({ missions, onSelect }) {
                   <td>{mission.name}</td>
                   <td>{mission.station}</td>
                   <td>{mission.people_count}</td>
+                  <td>{mission.urgency}</td>
                   <td><Status value={mission.status} /></td>
                   <td>
                     <button

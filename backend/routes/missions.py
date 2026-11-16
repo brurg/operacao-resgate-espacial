@@ -18,12 +18,12 @@ def list_missions():
 
 @router.get("/{mission_id}", response_model=MissionResponse)
 def get_mission(mission_id: int):
-    mission = mission.get_mission(mission_id)
+    result = mission.get_mission(mission_id)
 
-    if mission is None:
+    if result is None:
         raise HTTPException(
             status_code=404,
             detail="Mission not found"
         )
 
-    return mission
+    return result

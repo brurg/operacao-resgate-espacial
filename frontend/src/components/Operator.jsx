@@ -57,6 +57,7 @@ export function CreateMission({ runAction, onDone }) {
           name: form.get("name"),
           station: form.get("station"),
           people_count: Number(form.get("requested_seats")),
+          urgency: form.get("urgency"),
         }),
       "Missão cadastrada com sucesso."
     );
@@ -87,8 +88,17 @@ export function CreateMission({ runAction, onDone }) {
             name="requested_seats"
             type="number"
             min="1"
+            step="1"
             required
           />
+        </Field>
+
+        <Field label="Urgência da missão">
+          <select name="urgency" defaultValue="MEDIUM" required>
+            <option value="HIGH">Alta</option>
+            <option value="MEDIUM">Média</option>
+            <option value="LOW">Baixa</option>
+          </select>
         </Field>
 
         <FormActions submitLabel="Cadastrar missão" />
@@ -134,6 +144,7 @@ export function CreateShip({ runAction, onDone }) {
             name="total_capacity"
             type="number"
             min="1"
+            step="1"
             required
           />
         </Field>

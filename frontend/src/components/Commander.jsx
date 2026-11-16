@@ -11,6 +11,27 @@ import {
 import { api } from "../services/api.js";
 import { dateTime } from "../utils/formatters.js";
 
+function getRequestDetails(request, missions, ships, offersByMission) {
+  const mission = missions.find(
+    item => String(item.id) === String(request.mission_id)
+  );
+
+  const offers = Object.values(offersByMission).flat();
+
+  const offer = offers.find(
+    item => String(item.id) === String(request.mission_ship_id)
+  );
+
+  const ship = ships.find(
+    item => String(item.id) === String(offer?.ship_id)
+  );
+
+  return {
+    missionName: mission?.name || `Missão ${request.mission_id}`,
+    shipName: ship?.name || offer?.ship_name || "Nave não identificada"
+  };
+}
+
 export function CommanderOverview({
   missions,
   ships,
@@ -19,7 +40,7 @@ export function CommanderOverview({
   summaries,
   eventsByMission,
   selectedMission,
-  selectMission,
+  selectMission
 }) {
   const pendingRequests = requests.filter(
     request => String(request.status).toUpperCase() === "PENDING"
@@ -36,7 +57,7 @@ export function CommanderOverview({
       />
 
       <div className="metrics-grid">
-        <Metric label="Missões ativas" value={missions.length} />
+        <Metric label="Missões ativas" value={missions.filter(mission => mission.status !== "COMPLETED").length} />
         <Metric label="Naves cadastradas" value={ships.length} />
         <Metric label="Ofertas realizadas" value={totalOffers} />
         <Metric
@@ -50,19 +71,30 @@ export function CommanderOverview({
 
         {pendingRequests.length ? (
           <div className="request-list">
-            {pendingRequests.map(request => (
-              <article className="request-card" key={request.id}>
-                <div className="request-main">
-                  <strong>
-                    {request.mission_name || request.mission_id}
-                  </strong>
-                  <span>
-                    {request.requested_seats} assentos solicitados
-                  </span>
-                </div>
-                <Status value={request.status} />
-              </article>
-            ))}
+            {pendingRequests.map(request => {
+              const { missionName, shipName } = getRequestDetails(
+                request,
+                missions,
+                ships,
+                offersByMission
+              );
+
+              return (
+                <article className="request-card" key={request.id}>
+                  <div className="request-main">
+                    <h3>{missionName}</h3>
+
+                    <p>{shipName}</p>
+
+                    <span>
+                      {request.requested_seats} assentos solicitados
+                    </span>
+                  </div>
+
+                  <Status value={request.status} />
+                </article>
+              );
+            })}
           </div>
         ) : (
           <Empty title="Nenhuma solicitação pendente" />
@@ -96,8 +128,8 @@ export function CreateOffer({
     const success = await runAction(
       () =>
         api.createOffer({
-          mission_id: form.get("mission_id"),
-          ship_id: form.get("ship_id"),
+          mission_id: Number(form.get("mission_id")),
+          ship_id: Number(form.get("ship_id")),
           offered_seats: Number(form.get("offered_seats")),
           arrival_time: form.get("arrival_time"),
         }),
@@ -144,6 +176,7 @@ export function CreateOffer({
             name="offered_seats"
             type="number"
             min="1"
+            step="1"
             required
           />
         </Field>
@@ -211,7 +244,13 @@ export function FleetList({ ships, offersByMission }) {
   );
 }
 
-export function RequestsList({ requests, runAction }) {
+export function RequestsList({
+  requests,
+  missions,
+  ships,
+  offersByMission,
+  runAction
+}) {
   const [confirmedSeats, setConfirmedSeats] = React.useState({});
 
   async function respond(requestId, seats) {
@@ -236,19 +275,33 @@ export function RequestsList({ requests, runAction }) {
 
             const seats =
               confirmedSeats[request.id] ?? String(request.requested_seats);
+            
+              const { missionName, shipName } = getRequestDetails(
+                request,
+                missions,
+                ships,
+                offersByMission
+              );
 
             return (
               <article className="request-card" key={request.id}>
                 <div className="request-main">
-                  <h3>{request.mission_name || request.mission_id}</h3>
-                  <p>{request.requested_seats} assentos solicitados</p>
+                  <h3>{missionName}</h3>
+                  <p>{shipName}</p>
+
+                  <p>
+                    {request.requested_seats} assentos solicitados
+                  </p>
 
                   {!isPending && (
-                    <p>{request.confirmed_seats} assentos confirmados</p>
+                    <p>
+                      {request.confirmed_seats} assentos confirmados
+                    </p>
                   )}
 
                   <Status value={request.status} />
-                </div>        
+                </div>
+
                 {isPending && (
                   <div className="response-controls">
                     <Field label="Assentos a confirmar">

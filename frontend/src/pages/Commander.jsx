@@ -17,6 +17,7 @@ const TABS = [
 
 export default function CommanderArea(props) {
   const [selectedMission, setSelectedMission] = useState("");
+
   function selectMission(id) {
     setSelectedMission(String(id));
     props.onTab("overview");
@@ -46,6 +47,9 @@ export default function CommanderArea(props) {
         return (
           <RequestsList
             requests={props.requests}
+            missions={props.missions}
+            ships={props.ships}
+            offersByMission={props.offersByMission}
             runAction={props.runAction}
           />
         );
@@ -88,6 +92,7 @@ export default function CommanderArea(props) {
         <div className="role-pill">Comandante</div>
 
         <span className="sidebar-label">MENU PRINCIPAL</span>
+
         <nav className="app-tabs">
           {TABS.map(item => (
             <button
@@ -120,7 +125,13 @@ export default function CommanderArea(props) {
               title="Atualizar dados"
               aria-label="Atualizar dados"
             >
-              <span className={props.loading ? "refresh-icon spinning" : "refresh-icon"}>
+              <span
+                className={
+                  props.loading
+                    ? "refresh-icon spinning"
+                    : "refresh-icon"
+                }
+              >
                 ↻
               </span>
             </button>
