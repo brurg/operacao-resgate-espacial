@@ -60,6 +60,47 @@ Para interromper os serviços:
 ```bash
 docker compose down
 ```
+### Execução sem Docker
+
+Caso prefira executar o projeto sem Docker, é necessário ter Python e Node.js instalados na máquina.
+
+**Backend**
+
+Na raiz do projeto, crie e ative um ambiente virtual:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+No Windows, a ativação pode ser feita com:
+
+```powershell
+venv\Scripts\activate
+```
+
+Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+Inicie o servidor FastAPI: 
+```bash
+uvicorn backend.main:app --reload
+```
+
+**Frontend**
+
+Em outro terminal, acesse a pasta do frontend e instale as dependências:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Após a inicialização, o frontend estará disponível em http://localhost:5173/.
 
 ## Documentação da API
 
