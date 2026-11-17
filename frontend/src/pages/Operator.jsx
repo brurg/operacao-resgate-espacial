@@ -4,13 +4,18 @@ import {
   CreateMission,
   CreateShip,
 } from "../components/Operator.jsx";
-import { ShipsList, MissionsList } from "../components/Common.jsx";
+import {
+  ShipsList,
+  MissionsList,
+  RequestsList,
+} from "../components/Common.jsx";
 
 const TABS = [
   { id: "overview", label: "Visão geral" },
+  { id: "missions", label: "Missões" },
+  { id: "requests", label: "Solicitações" },
   { id: "create-mission", label: "Cadastrar missão" },
   { id: "create-ship", label: "Cadastrar nave" },
-  { id: "missions", label: "Missões" },
   { id: "ships", label: "Naves" },
 ];
 
@@ -50,6 +55,18 @@ export default function OperatorArea(props) {
 
       case "ships":
         return <ShipsList ships={props.ships} />;
+
+      case "requests":
+        return (
+          <RequestsList
+            requests={props.requests}
+            missions={props.missions}
+            ships={props.ships}
+            offersByMission={props.offersByMission}
+            runAction={props.runAction}
+            role="operator"
+          />
+        );
 
       default:
         return (

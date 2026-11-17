@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from backend.repositories.memory import (
     missions,
     mission_ships,
@@ -282,7 +282,8 @@ def execute_strategy(mission_id=None):
                 request = create_request(
                     mission_id=mission["id"],
                     mission_ship_id=offer["id"],
-                    requested_seats=seats_to_request
+                    requested_seats=seats_to_request,
+                    expires_at=datetime.now(timezone.utc) + timedelta(hours=3)
                 )
 
                 created_requests.append(request)

@@ -12,13 +12,8 @@ ships = {
     },
     2: {
         "id": 2,
-        "name": "eta",
+        "name": "Beta",
         "total_capacity": 17
-    },
-    3: {
-        "id": 3,
-        "name": "Gamma",
-        "total_capacity": 5
     }
 }
 
@@ -28,7 +23,7 @@ events = {}
 
 counters = {
     "missions": 0,
-    "ships": 3,
+    "ships": 2,
     "mission_ships": 0,
     "requests": 0,
     "events": 0

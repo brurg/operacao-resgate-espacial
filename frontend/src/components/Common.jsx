@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { statusClass, statusLabel } from "../constants/status.js";
 import { dateTime } from "../utils/formatters.js";
+import { api } from "../services/api.js";
 
 export function Status({ value }) {
   return (
@@ -210,6 +211,11 @@ export function MissionTracking({
 
       {mission && (
         <>
+          <div className="mission-heading">
+            <h3>{mission.name}</h3>
+            <Status value={mission.status} />
+          </div>
+
           <div className="metrics-grid">
             <Metric
               label="Passageiros solicitados"
@@ -277,6 +283,180 @@ export function MissionTracking({
             </>
           )}
         </>
+      )}
+    </section>
+  );
+}
+
+function getRequestDetails(request, missions, ships, offersByMission) {
+  const mission = missions.find(
+    item => String(item.id) === String(request.mission_id)
+  );
+
+  const offers = Object.values(offersByMission).flat();
+
+  const offer = offers.find(
+    item => String(item.id) === String(request.mission_ship_id)
+  );
+
+  const ship = ships.find(
+    item => String(item.id) === String(offer?.ship_id)
+  );
+
+  return {
+    missionName: mission?.name || `Missão ${request.mission_id}`,
+    shipName: ship?.name || offer?.ship_name || "Nave não identificada",
+  };
+}
+
+export function RequestsList({
+  requests,
+  missions,
+  ships,
+  offersByMission,
+  runAction,
+  role,
+}) {
+  const [confirmedSeats, setConfirmedSeats] = React.useState({});
+
+  async function respond(requestId, seats) {
+    await runAction(
+      () => api.respondRequest(requestId, seats),
+      seats === 0
+        ? "Solicitação recusada com sucesso."
+        : "Resposta registrada com sucesso."
+    );
+  }
+
+  async function cancel(requestId) {
+    await runAction(
+      () => api.cancelRequest(requestId),
+      "Solicitação cancelada com sucesso."
+    );
+  }
+  
+  const statusOrder = {
+    PENDING: 1,
+    PARTIAL: 2,
+    CONFIRMED: 3,
+    UNAVAILABLE: 4,
+  };
+  
+  const sortedRequests = [...requests].sort((a, b) => {
+    const orderA = statusOrder[String(a.status).toUpperCase()] ?? 99;
+    const orderB = statusOrder[String(b.status).toUpperCase()] ?? 99;
+  
+    return orderA - orderB;
+  });
+
+  return (
+    <section className="panel">
+      <SectionTitle
+        title="Solicitações de resgate"
+        description={
+          role === "operator"
+            ? "Consulte e cancele solicitações pendentes."
+            : "Consulte e responda às solicitações recebidas."
+        }
+      />
+
+      {requests.length ? (
+        <div className="request-list">
+          {sortedRequests.map(request => {
+            const isPending =
+              String(request.status).toUpperCase() === "PENDING";
+
+            const seats =
+              confirmedSeats[request.id] ??
+              String(request.requested_seats);
+
+            const { missionName, shipName } = getRequestDetails(
+              request,
+              missions,
+              ships,
+              offersByMission
+            );
+
+            return (
+              <article className="request-card" key={request.id}>
+                <div className="request-main">
+                  <h3>{missionName}</h3>
+                  <p>{shipName}</p>
+                  <p>Prioridade: {request.urgency}</p>
+                  <p>
+                    {request.requested_seats} assentos solicitados
+                  </p>
+
+                  {!isPending && (
+                    <p>
+                      {request.confirmed_seats ?? 0} assentos confirmados
+                    </p>
+                  )}
+
+                  <Status value={request.status} />
+                </div>
+
+                {isPending && role === "operator" && (
+                  <div className="response-controls">
+                    <button
+                      type="button"
+                      className="primary-button"
+                      onClick={() => cancel(request.id)}
+                    >
+                      Cancelar solicitação
+                    </button>
+                  </div>
+                )}
+
+                {isPending && role === "commander" && (
+                  <div className="response-controls">
+                    <Field label="Assentos a confirmar">
+                      <input
+                        type="number"
+                        min="1"
+                        max={request.requested_seats}
+                        step="1"
+                        value={seats}
+                        onChange={event =>
+                          setConfirmedSeats(previous => ({
+                            ...previous,
+                            [request.id]: event.target.value,
+                          }))
+                        }
+                      />
+                    </Field>
+
+                    <button
+                      type="button"
+                      className="primary-button"
+                      disabled={
+                        seats === "" ||
+                        !Number.isInteger(Number(seats)) ||
+                        Number(seats) <= 0 ||
+                        Number(seats) > request.requested_seats
+                      }
+                      onClick={() =>
+                        respond(request.id, Number(seats))
+                      }
+                    >
+                      Confirmar assentos
+                    </button>
+
+                    <button
+                      type="button"
+                      className="primary-button"
+                      onClick={() => respond(request.id, 0)}
+                    >
+                      Recusar
+                    </button>
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <Empty title="Nenhuma solicitação encontrada" />
       )}
     </section>
   );

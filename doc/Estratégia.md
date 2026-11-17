@@ -162,6 +162,8 @@ Para definir o comportamento da estratégia, foram adotadas as seguintes premiss
 - A persistência dos dados é realizada em memória.
 - A disponibilidade informada por uma nave no cadastro da oferta é considerada válida durante o processamento dos pedidos. Caso o comandante não consiga atender à quantidade solicitada, essa situação é representada por uma confirmação parcial ou recusa.
 - Alterações operacionais espontâneas na capacidade de uma nave após a confirmação dos assentos não são simuladas pelo sistema. As vagas já confirmadas são consideradas compromissos garantidos.
+liberados e deixam de ser considerados na capacidade reservada da nave. Em seguida, a estratégia de distribuição pode ser executada novamente para buscar outras alternativas e atender à necessidade restante da missão.
+- Cada pedido tem um prazo de 3 horas, representando o intervalo máximo de espera antes do pedido expirar.
 
 ## Consistência e concorrência
 

@@ -3,9 +3,8 @@ import {
   CommanderOverview,
   CreateOffer,
   FleetList,
-  RequestsList,
 } from "../components/Commander.jsx";
-import { MissionsList } from "../components/Common.jsx";
+import { MissionsList, RequestsList } from "../components/Common.jsx";
 
 const TABS = [
   { id: "overview", label: "Visão geral" },
@@ -51,9 +50,10 @@ export default function CommanderArea(props) {
             ships={props.ships}
             offersByMission={props.offersByMission}
             runAction={props.runAction}
+            role="commander"
           />
         );
-
+        
       case "missions":
         return (
           <MissionsList
