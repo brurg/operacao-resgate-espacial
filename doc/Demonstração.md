@@ -105,4 +105,4 @@ Durante a execução, foram demonstradas as seguintes funcionalidades:
 
 O vídeo a seguir apresenta a execução prática do cenário descrito neste documento, incluindo o cadastro da missão, as respostas dos comandantes, a redistribuição dos assentos e a conclusão da evacuação.
 
-**Vídeo:** [Inserir link do vídeo]
+**Vídeo:** [demonstração](/doc/demonstracao/demonstracao.mp4)

@@ -11,6 +11,27 @@ import {
 import { api } from "../services/api.js";
 import { dateTime } from "../utils/formatters.js";
 
+function getRequestDetails(request, missions, ships, offersByMission) {
+  const mission = missions.find(
+    item => String(item.id) === String(request.mission_id)
+  );
+
+  const offers = Object.values(offersByMission).flat();
+
+  const offer = offers.find(
+    item => String(item.id) === String(request.mission_ship_id)
+  );
+
+  const ship = ships.find(
+    item => String(item.id) === String(offer?.ship_id)
+  );
+
+  return {
+    missionName: mission?.name || `Missão ${request.mission_id}`,
+    shipName: ship?.name || offer?.ship_name || "Nave não identificada",
+  };
+}
+
 export function CommanderOverview({
   missions,
   ships,

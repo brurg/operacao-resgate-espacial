@@ -1,135 +1,116 @@
-# Demonstração Complementar – Comportamentos da Estratégia
+# Demonstração Complementar – Estratégia de Distribuição
 
-## Objetivo
+## 1. Cadastrar as missões
 
-Esta demonstração complementar tem como objetivo apresentar o comportamento da estratégia de distribuição de assentos em um cenário com múltiplas missões e naves.
+Na área do Operador, acesse **Cadastrar missão** e cadastre:
 
-Diferentemente da demonstração principal, que concentra a execução em uma única missão, este cenário explora situações em que diferentes níveis de urgência disputam a capacidade disponível da frota.
+| Missão | Estação | Passageiros | Urgência |
+|---|---|---:|---|
+| Aurora | Estação Aurora | 12 | LOW |
+| Boreal | Estação Boreal | 10 | MEDIUM |
+| Centauri | Estação Centauri | 15 | HIGH |
 
-Ao longo da execução, são demonstrados os critérios de priorização, a seleção das naves, o controle de capacidade comprometida, a reavaliação de pedidos e a redistribuição de assentos diante de respostas dos comandantes.
+## 2. Cadastrar as naves
 
-Também são verificadas situações excepcionais, como cancelamentos, expirações e tentativas de responder novamente a pedidos já encerrados.
+Na área do Operador, acesse **Cadastrar nave**:
 
-## Cenário utilizado
+| Nave | Capacidade |
+|---|---:|
+| Alpha | 10 |
+| Beta | 8 |
+| Gamma | 12 |
+| Delta | 15 |
 
-Foram consideradas três missões:
+## 3. Cadastrar as disponibilidades
 
-| Missão | Pessoas | Urgência |
-|---|---:|---|
-| Aurora | 12 | LOW |
-| Boreal | 10 | MEDIUM |
-| Centauri | 15 | HIGH |
+Na área do Comandante, acesse **Disponibilizar assentos** e cadastre as ofertas conforme a tabela.
 
-Também foram utilizadas quatro naves:
+| Missão | Nave | Assentos oferecidos | ETA |
+|---|---|---:|---:|
+| Centauri | Beta | 8 | 30 min |
+| Centauri | Alpha | 7 | 60 min |
+| Boreal | Gamma | 7 | 120 min |
+| Boreal | Alpha | 3 | 60 min |
+| Aurora | Delta | 10 | 90 min |
+| Aurora | Gamma | 5 | 120 min |
 
-| Nave | Capacidade | ETA |
+Preencha a previsão de chegada de forma que os ETAs correspondam aos valores indicados.
+
+**Conferência da capacidade:**
+
+| Nave | Total oferecido | Capacidade |
 |---|---:|---:|
-| Alpha | 10 | 60 min |
-| Beta | 8 | 30 min |
-| Gamma | 12 | 120 min |
-| Delta | 15 | 90 min |
+| Alpha | 10 | 10 |
+| Beta | 8 | 8 |
+| Gamma | 12 | 12 |
+| Delta | 10 | 15 |
 
-As ofertas são cadastradas para as missões conforme a disponibilidade apresentada em cada etapa. A capacidade efetivamente disponível é considerada pela estratégia, levando em conta os assentos já comprometidos por outros pedidos.
+## 4. Executar a estratégia e conferir a distribuição
 
-## Sequência da demonstração
+Execute a estratégia e observe a ordem de atendimento das missões e a seleção das naves.
 
-### Etapa 1 – Cadastro das missões e naves
+| Missão | Ordem esperada das naves | Distribuição esperada |
+|---|---|---|
+| Centauri (HIGH) | Beta → Alpha | 8 + 7 = 15 |
+| Boreal (MEDIUM) | Gamma → Alpha | 7 + 3 = 10 |
+| Aurora (LOW) | Delta → Gamma | 10 + 2 = 12 |
 
-Foram cadastradas as missões Aurora, Boreal e Centauri, com diferentes quantidades de pessoas e níveis de urgência.
+Verifique:
+- Centauri é atendida primeiro por possuir urgência HIGH.
+- Boreal é atendida antes de Aurora.
+- HIGH prioriza o menor ETA.
+- MEDIUM considera ETA e capacidade disponível.
+- LOW prioriza a maior capacidade disponível.
 
-Também foram cadastradas as quatro naves, com capacidades e tempos estimados de chegada distintos.
+## 5. Verificar os pedidos pendentes
 
-Essa configuração permite observar como a estratégia diferencia as missões e as naves de acordo com seus critérios de seleção.
+Antes de responder aos pedidos, acesse **Solicitações**.
 
-### Etapa 2 – Priorização das missões
+**Resultado esperado:**
+- Os pedidos aparecem com status PENDING.
+- Os assentos solicitados ficam temporariamente comprometidos.
+- A capacidade comprometida não deve ser utilizada novamente pela estratégia.
 
-Com as missões cadastradas, foi executada a estratégia de distribuição.
+## 6. Realizar uma confirmação parcial
 
-Foi observado que a missão Centauri, classificada como HIGH, recebe prioridade sobre Boreal e Aurora, independentemente da ordem de criação.
+Na área do Comandante, selecione um pedido de 8 assentos e confirme apenas 5.
 
-Entre missões com o mesmo nível de urgência, a mais antiga é considerada primeiro.
+**Resultado esperado:**
+- O pedido passa para PARTIAL.
+- Somente 5 assentos permanecem comprometidos.
+- Os 3 assentos não confirmados são liberados.
+- A estratégia pode considerar novamente a capacidade liberada.
 
-Essa etapa demonstra que a estratégia não distribui os assentos apenas pela ordem de cadastro das ofertas: ela considera a prioridade global das missões.
+## 7. Recusar um pedido
 
-### Etapa 3 – Seleção das naves conforme a urgência
+Selecione outro pedido pendente e clique em **Recusar**.
 
-Foram disponibilizadas ofertas das diferentes naves e observada a ordenação realizada pela estratégia.
+**Resultado esperado:**
+- O pedido passa para UNAVAILABLE.
+- A capacidade anteriormente comprometida é liberada.
+- A estratégia pode utilizar essa capacidade em novas solicitações.
 
-Para a missão HIGH, o menor ETA é priorizado.
+## 8. Cancelar um pedido
 
-Para a missão MEDIUM, são considerados conjuntamente o tempo estimado de chegada e a capacidade disponível, com pesos iguais.
+Na área do Operador, acesse **Solicitações** e cancele um pedido ainda PENDING.
 
-Para a missão LOW, a maior capacidade disponível é priorizada, utilizando o menor ETA como critério de desempate.
+**Resultado esperado:**
+- O pedido passa para CANCELLED.
+- Seus assentos deixam de ser considerados comprometidos.
+- A capacidade pode ser utilizada em uma nova distribuição.
 
-Essa etapa permite comparar os diferentes critérios de seleção aplicados conforme a urgência da missão.
+## 9. Verificar a preempção
 
-### Etapa 4 – Comprometimento de capacidade por pedidos pendentes
+Criação de uma missão Urgente em que precise de capacidade comprometida por um pedido PENDING de uma missão menos urgente.
 
-Após a geração dos primeiros pedidos, foi executada novamente a estratégia antes de receber todas as respostas dos comandantes.
+**Resultado esperado:**
+- O pedido pendente de menor prioridade foi cancelado para liberar capacidade.
+- A missão de maior urgência passa a ter prioridade na distribuição.
+- Como acabaria a capacidade da nave ele foi totalmente cancelado por não ter mais disponibilidade.
+- Assentos já confirmados não são retirados.
 
-Foi observado que os assentos associados aos pedidos pendentes são considerados temporariamente comprometidos.
+## Vídeo da demonstração
 
-Dessa forma, o sistema não utiliza a mesma capacidade repetidamente para gerar novas solicitações.
+O vídeo a seguir apresenta a execução prática do cenário descrito neste documento, 
 
-Também foi possível observar a diferença entre assentos pendentes e confirmados: os primeiros representam compromissos temporários, enquanto somente os confirmados são considerados garantidos para a missão.
-
-### Etapa 5 – Resposta parcial e redistribuição
-
-Um dos comandantes respondeu parcialmente a um pedido, confirmando uma quantidade inferior à solicitada.
-
-O sistema registrou a resposta, manteve somente os assentos confirmados como comprometidos e liberou a quantidade não atendida.
-
-Em seguida, a estratégia foi executada novamente, considerando a necessidade restante da missão e a capacidade que voltou a ficar disponível.
-
-Foi possível observar a geração de novas solicitações para atender às vagas ainda não confirmadas.
-
-### Etapa 6 – Recusa e liberação de capacidade
-
-Outro comandante recusou um pedido pendente.
-
-O sistema registrou a recusa, liberou a capacidade anteriormente comprometida e reavaliou a distribuição.
-
-A estratégia passou a considerar outras naves disponíveis para atender à necessidade restante.
-
-### Etapa 7 – Cancelamento de pedido pendente
-
-Foi gerado um novo pedido e, antes de receber uma resposta do comandante, foi realizado seu cancelamento.
-
-O sistema atualizou o estado do pedido para CANCELLED e deixou de considerar seus assentos como comprometidos.
-
-Após o cancelamento, a estratégia pôde utilizar a capacidade liberada em uma nova distribuição.
-
-### Etapa 8 – Expiração de pedido pendente
-
-Também foi verificado o comportamento de um pedido que não recebeu resposta dentro do prazo de 3 horas
-
-Após a operação de expiração, o pedido passou para o estado EXPIRED e sua capacidade deixou de ser considerada comprometida.
-
-A estratégia pôde então procurar outras alternativas para atender às vagas restantes.
-
-### Etapa 9 – Repriorização e preempção de pedidos pendentes
-
-Foi considerada uma situação em que uma missão de maior urgência precisava de capacidade que estava comprometida por um pedido pendente de uma missão menos urgente.
-
-A estratégia reavaliou a distribuição e, quando necessário, cancelou pedidos pendentes de menor prioridade para liberar capacidade para a missão prioritária.
-
-Foi verificado que assentos já confirmados não são retirados, e que pedidos de mesma prioridade não são cancelados apenas por esse critério.
-
-Essa etapa demonstra que a estratégia considera a prioridade global das missões mesmo após a geração dos primeiros pedidos.
-
-## Comportamentos demonstrados
-
-| Comportamento | Verificação realizada |
-|---|---|
-| Priorização por urgência | Missões HIGH antes de MEDIUM e LOW |
-| Desempate por criação | Missão mais antiga primeiro |
-| Seleção de naves HIGH | Menor ETA |
-| Seleção de naves MEDIUM | Equilíbrio entre ETA e capacidade |
-| Seleção de naves LOW | Maior capacidade |
-| Controle de pedidos pendentes | Capacidade temporariamente comprometida |
-| Confirmação parcial | Liberação dos assentos não confirmados |
-| Recusa | Liberação da capacidade |
-| Cancelamento | Encerramento e liberação do pedido |
-| Expiração | Encerramento e liberação do pedido |
-| Redistribuição | Geração de novos pedidos |
-| Preempção | Liberação de pedidos pendentes de menor prioridade |
+**Vídeo:** [demonstração_complementar](/doc/demonstracao/demonstracao_complementar.mp4)

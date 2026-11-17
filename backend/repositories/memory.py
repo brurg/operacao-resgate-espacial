@@ -8,12 +8,12 @@ ships = {
     1: {
         "id": 1,
         "name": "Alpha",
-        "total_capacity": 12
+        "total_capacity": 10
     },
     2: {
         "id": 2,
         "name": "Beta",
-        "total_capacity": 17
+        "total_capacity": 8
     }
 }
 

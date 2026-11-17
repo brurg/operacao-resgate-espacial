@@ -159,7 +159,8 @@ A documentação detalhada dos cenários, organizada por arquivo de teste, está
 
 Para demonstrar o funcionamento do sistema, foi utilizado um cenário de evacuação com múltiplas naves, incluindo confirmações parciais e recusas de solicitações, seguido da redistribuição automática dos assentos restantes até a conclusão da missão.
 
-O cenário utilizado, juntamente com a sequência de operações e os resultados esperados, está descrito em **[Demonstração de Funcionamento](doc/Demonstração.md)**. A demonstração prática do sistema está disponível no vídeo indicado abaixo.
+O cenário utilizado, juntamente com a sequência de operações e os resultados esperados, está descrito em **[Demonstração de Funcionamento](doc/Demonstração.md)**. 
 
-Vídeo: [Inserir link do vídeo]
+Além desta foi criada uma demonstração complementar para analisar outros casos da distribuição da estratégia, descrito em **[Demonstração Complementar](doc/DemonstraçãoComplementar.md)**. 
 
+A demonstração prática do sistema está disponível nos vídeos na pasta **[Vídeos da Demonstração](doc/demonstracao)**.
